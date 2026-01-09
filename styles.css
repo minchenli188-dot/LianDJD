@@ -353,6 +353,138 @@ body {
     border: 1px dashed var(--border);
 }
 
+/* ============== Book Introduction Page ============== */
+.intro-page {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.intro-header {
+    text-align: center;
+    padding: 40px 20px 32px;
+    background: linear-gradient(180deg, rgba(196, 163, 90, 0.08) 0%, transparent 100%);
+    border-radius: 16px;
+    margin-bottom: 32px;
+}
+
+.book-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: var(--accent-light);
+    font-size: 1.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 24px rgba(139, 35, 35, 0.25);
+}
+
+.book-title {
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    letter-spacing: 0.15em;
+    margin-bottom: 12px;
+}
+
+.book-meta {
+    font-size: 0.95rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+}
+
+.intro-content {
+    background: var(--bg-white);
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+}
+
+.intro-section {
+    padding: 28px 24px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.intro-section:last-child {
+    border-bottom: none;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--primary);
+    margin-bottom: 16px;
+}
+
+.title-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+    color: var(--primary-dark);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-body {
+    color: var(--text-medium);
+    line-height: 2;
+}
+
+.section-body p {
+    margin-bottom: 16px;
+    text-indent: 2em;
+    text-align: justify;
+}
+
+.section-body p:last-child {
+    margin-bottom: 0;
+}
+
+.intro-footer {
+    text-align: center;
+    padding: 32px 20px;
+}
+
+.footer-decoration {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 0 auto 20px;
+}
+
+.footer-text {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+}
+
+/* Clickable Book Title in Sidebar */
+.sidebar-header h2 {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.sidebar-header h2:hover {
+    color: var(--accent);
+}
+
+/* ============== End Book Introduction Page ============== */
+
 /* AI Content */
 .ai-content {
     flex: 1;

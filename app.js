@@ -15,6 +15,9 @@ const AppState = {
 // DOM Elements
 let DOM = {};
 
+// View state: 'intro' or 'chapter'
+let currentView = 'intro';
+
 // ============== Analytics System ==============
 
 /**
@@ -91,7 +94,14 @@ async function init() {
         closeAiBtn: document.getElementById('closeAiBtn'),
         retryBtn: document.getElementById('retryBtn'),
         
-        // Content
+        // Content Views
+        introPage: document.getElementById('introPage'),
+        chapterContent: document.getElementById('chapterContent'),
+        
+        // Sidebar Header (book title)
+        sidebarHeader: document.querySelector('.sidebar-left .sidebar-header h2'),
+        
+        // Chapter Content
         chapterNav: document.getElementById('chapterNav'),
         chapterTitle: document.getElementById('chapterTitle'),
         chapterSubtitle: document.getElementById('chapterSubtitle'),
@@ -120,9 +130,8 @@ async function init() {
     try {
         await loadData();
         renderChapterNav();
-        if (AppState.chapters.length > 0) {
-            selectChapter(AppState.chapters[0].name);
-        }
+        // Show intro page by default (don't auto-select first chapter)
+        showIntroPage();
     } catch (error) {
         console.error('Init error:', error);
     }
@@ -139,6 +148,9 @@ function setupEventListeners() {
     DOM.closeAiBtn?.addEventListener('click', closeAiPanel);
     DOM.overlay?.addEventListener('click', closeAllSidebars);
     DOM.retryBtn?.addEventListener('click', retryAiRequest);
+    
+    // Click on book title to show intro page
+    DOM.sidebarHeader?.addEventListener('click', showIntroPage);
 }
 
 function openMenu() {
@@ -171,6 +183,41 @@ function retryAiRequest() {
     if (AppState.currentParagraph) {
         getAIInterpretation(AppState.currentParagraph);
     }
+}
+
+/**
+ * Show the book introduction page
+ */
+function showIntroPage() {
+    currentView = 'intro';
+    
+    // Show intro, hide chapter content
+    if (DOM.introPage) DOM.introPage.style.display = 'block';
+    if (DOM.chapterContent) DOM.chapterContent.style.display = 'none';
+    
+    // Clear active state from nav items
+    DOM.chapterNav?.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // Reset AI panel
+    showAiWelcome();
+    
+    // Close sidebar on mobile
+    if (window.innerWidth < 1024) {
+        closeMenu();
+    }
+}
+
+/**
+ * Show chapter content (hide intro page)
+ */
+function showChapterContent() {
+    currentView = 'chapter';
+    
+    // Hide intro, show chapter content
+    if (DOM.introPage) DOM.introPage.style.display = 'none';
+    if (DOM.chapterContent) DOM.chapterContent.style.display = 'block';
 }
 
 /**
@@ -313,6 +360,9 @@ function selectChapter(chapterKey) {
     if (!chapter) return;
     
     AppState.currentChapter = chapter;
+    
+    // Switch to chapter view
+    showChapterContent();
     
     // Track chapter view
     trackPageView(chapter.name);
