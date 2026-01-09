@@ -216,6 +216,7 @@ body {
     flex: 1;
     overflow-y: auto;
     padding: 16px;
+    padding-bottom: 100px;
 }
 
 /* Navigation Sections */
@@ -357,12 +358,12 @@ body {
     flex: 1;
     overflow-y: auto;
     padding: 16px;
-    padding-bottom: 50px;
+    padding-bottom: 100px;
 }
 
 /* Ensure last card has extra bottom margin */
 .ai-response .response-card:last-child {
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 
 /* AI Welcome */
@@ -615,14 +616,30 @@ body {
     }
 }
 
-/* Mobile - Extra bottom padding for AI panel */
+/* Mobile - Extra bottom padding for sidebars */
 @media (max-width: 1023px) {
     .ai-content {
-        padding-bottom: 120px; /* Large padding for mobile browser chrome */
+        padding-bottom: 300px;
     }
     
     .ai-response .response-card:last-child {
-        margin-bottom: 60px;
+        margin-bottom: 150px;
+    }
+    
+    .ai-response::after {
+        content: '';
+        display: block;
+        height: 150px;
+    }
+    
+    .chapter-list {
+        padding-bottom: 300px;
+    }
+    
+    .chapter-list::after {
+        content: '';
+        display: block;
+        height: 150px;
     }
 }
 
