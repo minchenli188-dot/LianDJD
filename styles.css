@@ -357,12 +357,12 @@ body {
     flex: 1;
     overflow-y: auto;
     padding: 16px;
-    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: 50px;
 }
 
-/* Ensure last card has extra bottom margin for mobile */
+/* Ensure last card has extra bottom margin */
 .ai-response .response-card:last-child {
-    margin-bottom: 24px;
+    margin-bottom: 30px;
 }
 
 /* AI Welcome */
@@ -618,11 +618,11 @@ body {
 /* Mobile - Extra bottom padding for AI panel */
 @media (max-width: 1023px) {
     .ai-content {
-        padding-bottom: 80px; /* Fixed large padding for mobile browsers */
+        padding-bottom: 120px; /* Large padding for mobile browser chrome */
     }
     
     .ai-response .response-card:last-child {
-        margin-bottom: 40px;
+        margin-bottom: 60px;
     }
 }
 
