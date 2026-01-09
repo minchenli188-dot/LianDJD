@@ -113,8 +113,7 @@ body {
 .sidebar {
     position: fixed;
     top: 0;
-    height: 100vh; /* Fallback for older browsers */
-    height: 100dvh; /* Dynamic viewport height for mobile browsers */
+    bottom: 0; /* Use top+bottom instead of height for better mobile support */
     background: var(--bg-white);
     z-index: 1001;
     display: flex;
@@ -524,8 +523,6 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    height: 100vh; /* Fallback */
-    height: 100dvh; /* Dynamic viewport height */
     background: rgba(0,0,0,0.5);
     z-index: 1000;
     opacity: 0;
@@ -560,6 +557,7 @@ body {
     .sidebar {
         position: sticky;
         top: var(--header-height);
+        bottom: auto; /* Override mobile bottom: 0 */
         height: calc(100vh - var(--header-height));
         transform: none !important;
         box-shadow: none;
@@ -620,7 +618,11 @@ body {
 /* Mobile - Extra bottom padding for AI panel */
 @media (max-width: 1023px) {
     .ai-content {
-        padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+        padding-bottom: 80px; /* Fixed large padding for mobile browsers */
+    }
+    
+    .ai-response .response-card:last-child {
+        margin-bottom: 40px;
     }
 }
 
