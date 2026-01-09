@@ -38,7 +38,8 @@ body {
     background: var(--bg-main);
     color: var(--text-dark);
     line-height: 1.8;
-    min-height: 100vh;
+    min-height: 100vh; /* Fallback */
+    min-height: 100dvh; /* Dynamic viewport height */
     overflow-x: hidden;
 }
 
@@ -112,7 +113,8 @@ body {
 .sidebar {
     position: fixed;
     top: 0;
-    height: 100vh;
+    height: 100vh; /* Fallback for older browsers */
+    height: 100dvh; /* Dynamic viewport height for mobile browsers */
     background: var(--bg-white);
     z-index: 1001;
     display: flex;
@@ -356,6 +358,7 @@ body {
     flex: 1;
     overflow-y: auto;
     padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
 }
 
 /* AI Welcome */
@@ -516,6 +519,8 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
+    height: 100vh; /* Fallback */
+    height: 100dvh; /* Dynamic viewport height */
     background: rgba(0,0,0,0.5);
     z-index: 1000;
     opacity: 0;
