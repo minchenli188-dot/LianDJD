@@ -70,7 +70,7 @@ ssh -i your-key.pem ubuntu@18.139.165.168
 
 ---
 
-## 🔄 常用维护命令
+## 常用维护命令
 
 ### PM2 进程管理
 
@@ -211,7 +211,7 @@ https://dash.cloudflare.com → 选择 liandjd.com
 
 ---
 
-## 📊 数据分析面板
+## 数据分析面板
 
 访问地址：https://liandjd.com/api/analytics/dashboard
 

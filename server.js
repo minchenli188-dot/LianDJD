@@ -388,7 +388,7 @@ function generateDashboardHtml(summary) {
     </style>
 </head>
 <body>
-    <h1>📊 阿莲读经典 - 数据分析面板</h1>
+    <h1>阿莲读经典 - 数据分析面板</h1>
     
     <div class="grid">
         <div class="card">
@@ -448,7 +448,7 @@ function generateDashboardHtml(summary) {
         </tbody>
     </table>
     
-    <button class="refresh" onclick="location.reload()">🔄 刷新数据</button>
+    <button class="refresh" onclick="location.reload()">刷新数据</button>
     <p class="timestamp">数据生成时间: ${new Date(summary.generatedAt).toLocaleString('zh-CN')}</p>
 </body>
 </html>`;
