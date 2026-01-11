@@ -123,6 +123,9 @@ async function init() {
     // Setup event listeners
     setupEventListeners();
     
+    // Check if AI button was clicked before (restore static state)
+    checkAiButtonState();
+    
     // Track initial page view
     trackPageView();
     
@@ -166,6 +169,28 @@ function closeMenu() {
 function openAiPanel() {
     DOM.sidebarRight?.classList.add('open');
     DOM.overlay?.classList.add('active');
+    
+    // Mark AI button as clicked (stop animation)
+    markAiButtonClicked();
+}
+
+/**
+ * Mark AI button as clicked and persist state
+ */
+function markAiButtonClicked() {
+    if (!localStorage.getItem('liandjd_ai_btn_clicked')) {
+        localStorage.setItem('liandjd_ai_btn_clicked', 'true');
+    }
+    DOM.aiBtn?.classList.add('clicked');
+}
+
+/**
+ * Check if AI button was clicked before and apply static style
+ */
+function checkAiButtonState() {
+    if (localStorage.getItem('liandjd_ai_btn_clicked')) {
+        DOM.aiBtn?.classList.add('clicked');
+    }
 }
 
 function closeAiPanel() {
