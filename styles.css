@@ -97,7 +97,8 @@ body {
 
 .header-btn.ai-btn {
     background: var(--accent);
-    color: var(--primary-dark);
+    color: rgba(255, 255, 255, 0.9);
+    border: none;
 }
 
 .header-btn.ai-btn:hover,
@@ -525,7 +526,7 @@ body {
 /* AI Welcome */
 .ai-welcome {
     text-align: center;
-    padding: 20px 0;
+    padding: 8px 0;
 }
 
 .welcome-icon {
@@ -536,7 +537,7 @@ body {
 .ai-welcome h3 {
     font-size: 1.1rem;
     color: var(--primary);
-    margin-bottom: 12px;
+    margin-bottom: 4px;
 }
 
 .ai-welcome p {
@@ -555,7 +556,7 @@ body {
 
 /* Welcome Example Section */
 .welcome-example {
-    margin-top: 20px;
+    margin-top: 32px;
     padding: 0 4px;
 }
 
@@ -567,13 +568,15 @@ body {
 }
 
 .example-badge {
-    background: var(--accent);
-    color: #fff;
-    font-size: 0.75rem;
-    padding: 4px 14px;
-    border-radius: 12px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
+    background: transparent;
+    color: var(--text-light);
+    font-size: 0.8rem;
+    padding: 0;
+    border-radius: 0;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 2px;
 }
 
 /* Step Guide Styles */
