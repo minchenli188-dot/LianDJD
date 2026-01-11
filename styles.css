@@ -136,35 +136,6 @@ body {
         inset 0 1px 0 rgba(255,255,255,0.3),
         inset 0 -1px 0 rgba(0,0,0,0.1);
     text-shadow: 0 1px 2px rgba(100, 80, 40, 0.4);
-    animation: aiButtonPulse 3s ease-in-out infinite;
-}
-
-@keyframes aiButtonPulse {
-    0%, 100% {
-        box-shadow: 
-            0 3px 6px rgba(100, 80, 40, 0.35),
-            0 2px 4px rgba(0,0,0,0.2),
-            inset 0 1px 0 rgba(255,255,255,0.3),
-            inset 0 -1px 0 rgba(0,0,0,0.1);
-    }
-    50% {
-        box-shadow: 
-            0 3px 8px rgba(196, 163, 90, 0.5),
-            0 2px 4px rgba(0,0,0,0.2),
-            0 0 12px rgba(196, 163, 90, 0.3),
-            inset 0 1px 0 rgba(255,255,255,0.3),
-            inset 0 -1px 0 rgba(0,0,0,0.1);
-    }
-}
-
-/* Static state after user clicks */
-.header-btn.ai-btn.clicked {
-    animation: none;
-    box-shadow: 
-        0 3px 6px rgba(100, 80, 40, 0.35),
-        0 2px 4px rgba(0,0,0,0.2),
-        inset 0 1px 0 rgba(255,255,255,0.3),
-        inset 0 -1px 0 rgba(0,0,0,0.1);
 }
 
 .header-btn.ai-btn:hover {
@@ -172,11 +143,10 @@ body {
     box-shadow: 
         0 4px 8px rgba(100, 80, 40, 0.4),
         0 2px 4px rgba(0,0,0,0.2),
-        0 0 16px rgba(196, 163, 90, 0.4),
         inset 0 1px 0 rgba(255,255,255,0.4),
         inset 0 -1px 0 rgba(0,0,0,0.1);
     transform: translateY(-1px);
-    animation: none;
+    border-color: rgba(232, 213, 163, 0.6);
 }
 
 .header-btn.ai-btn:active {
@@ -185,25 +155,6 @@ body {
         0 1px 2px rgba(100, 80, 40, 0.3),
         inset 0 2px 4px rgba(0,0,0,0.15);
     transform: translateY(1px);
-    animation: none;
-}
-
-/* Static state hover - simpler effect */
-.header-btn.ai-btn.clicked:hover {
-    background: linear-gradient(180deg, #E8D5A3 0%, #D4B36A 50%, var(--accent) 100%);
-    transform: translateY(-1px);
-    box-shadow: 
-        0 4px 8px rgba(100, 80, 40, 0.4),
-        0 2px 4px rgba(0,0,0,0.2),
-        inset 0 1px 0 rgba(255,255,255,0.4);
-}
-
-.header-btn.ai-btn.clicked:active {
-    background: linear-gradient(180deg, var(--accent) 0%, #9A7B3A 50%, #7A6030 100%);
-    transform: translateY(1px);
-    box-shadow: 
-        0 1px 2px rgba(100, 80, 40, 0.3),
-        inset 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .header-title {
