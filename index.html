@@ -12,21 +12,20 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <button class="header-btn menu-btn" id="menuBtn" aria-label="打开目录">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="header-btn menu-btn with-label" id="menuBtn" aria-label="打开目录">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="3" y1="6" x2="21" y2="6"></line>
                 <line x1="3" y1="12" x2="21" y2="12"></line>
                 <line x1="3" y1="18" x2="21" y2="18"></line>
             </svg>
+            <span class="btn-label">目录</span>
         </button>
         <div class="header-title">
             <span class="logo-icon">莲</span>
             <span class="logo-text">阿莲读经典</span>
         </div>
-        <button class="header-btn ai-btn" id="aiBtn" aria-label="打开AI助手">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-            </svg>
+        <button class="header-btn ai-btn with-label" id="aiBtn" aria-label="打开AI助手">
+            <span class="btn-label">智慧家长助手</span>
         </button>
     </header>
 
@@ -148,7 +147,72 @@
                 <div class="ai-welcome" id="aiWelcome">
                     <div class="welcome-icon"></div>
                     <h3>欢迎来到智慧家长学堂</h3>
-                    <p class="welcome-desc">点击左侧原文段落，我将帮您更好的理解经典，让经典融入亲子教育</p>
+                    <p class="welcome-desc">点击左侧原文段落，我将帮您更好的理解经典，让经典融入亲子教育。</p>
+                    
+                    <div class="welcome-example">
+                        <div class="example-header">
+                            <span class="example-badge">使用指南</span>
+                        </div>
+                        
+                        <!-- Step 1 -->
+                        <div class="guide-step">
+                            <div class="step-indicator">
+                                <span class="step-number">1</span>
+                                <span class="step-line"></span>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-title">点击左上角「目录」选择章节</div>
+                                <div class="step-demo step-demo-menu">
+                                    <span class="demo-icon">☰</span>
+                                    <span class="demo-text">目录</span>
+                                    <span class="demo-arrow">→</span>
+                                    <span class="demo-chapter">经一章</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2 -->
+                        <div class="guide-step">
+                            <div class="step-indicator">
+                                <span class="step-number">2</span>
+                                <span class="step-line"></span>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-title">点击正文中想要解读的句子</div>
+                                <div class="step-demo step-demo-text">
+                                    <p>"<span class="highlight-text">大学之道，在明明德，在亲民，在止于至善。</span>"</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3 -->
+                        <div class="guide-step">
+                            <div class="step-indicator">
+                                <span class="step-number">3</span>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-title">获得智慧解读</div>
+                                <div class="step-result-preview">
+                                    <div class="preview-card">
+                                        <div class="preview-card-header">白话文解释</div>
+                                        <div class="preview-card-body">大学的宗旨，在于弘扬光明正大的品德...</div>
+                                    </div>
+                                    <div class="preview-card">
+                                        <div class="preview-card-header">家庭教育智慧</div>
+                                        <div class="preview-card-body">家庭教育的逻辑起点在于父母的自我完善...</div>
+                                    </div>
+                                    <div class="preview-card preview-card-warning">
+                                        <div class="preview-card-header">普通家长案例</div>
+                                        <div class="preview-card-body">妈妈看到孩子成绩不理想，瞬间爆发责骂...</div>
+                                    </div>
+                                    <div class="preview-card preview-card-success">
+                                        <div class="preview-card-header">智慧家长案例</div>
+                                        <div class="preview-card-body">另一位妈妈先深呼吸平复情绪，温和地说...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Loading State -->
