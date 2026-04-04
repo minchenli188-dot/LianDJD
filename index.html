@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=2.7">
+    <link rel="stylesheet" href="styles.css?v=3.0">
 </head>
 <body>
     <!-- Header -->
@@ -34,13 +34,17 @@
         <!-- Chapter Navigation Sidebar -->
         <aside class="sidebar sidebar-left" id="sidebarLeft">
             <div class="sidebar-header">
-                <h2>《大学》章句</h2>
+                <h2 class="book-title-text">《大学》章句</h2>
                 <button class="close-btn" id="closeMenuBtn" aria-label="关闭目录">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </button>
+            </div>
+            <div class="book-tabs">
+                <button class="book-tab active" data-book="daxue">大学</button>
+                <button class="book-tab" data-book="zhongyong">中庸</button>
             </div>
             <nav class="chapter-list" id="chapterNav">
                 <!-- Chapters populated by JS -->
@@ -49,8 +53,8 @@
 
         <!-- Center Content -->
         <section class="content-area">
-            <!-- Book Introduction Page -->
-            <div class="intro-page" id="introPage">
+            <!-- Book Introduction Page - 大学 -->
+            <div class="intro-page" id="introPage-daxue">
                 <div class="intro-header">
                     <div class="book-icon">大学</div>
                     <h1 class="book-title">《大学章句》</h1>
@@ -112,6 +116,69 @@
                 </div>
             </div>
             
+            <!-- Book Introduction Page - 中庸 -->
+            <div class="intro-page" id="introPage-zhongyong" style="display: none;">
+                <div class="intro-header">
+                    <div class="book-icon">中庸</div>
+                    <h1 class="book-title">《中庸章句》</h1>
+                    <p class="book-meta">儒家经典 · 四书之一</p>
+                </div>
+
+                <article class="intro-content">
+                    <section class="intro-section">
+                        <h2 class="section-title">
+                            <span class="title-icon">书</span>
+                            关于《中庸》
+                        </h2>
+                        <div class="section-body">
+                            <p>《中庸》原为《礼记》第三十一篇，相传为孔子之孙子思所作。宋代朱熹将其从《礼记》中抽出，与《大学》《论语》《孟子》并列，合称"四书"，成为儒学核心经典之一。</p>
+                            <p>全书以"中庸"为核心思想，阐述了"天命之性"、"率性之道"、"修道之教"三大命题。"中"是不偏不倚、无过不及；"庸"是平常、恒久。中庸之道，既是天理的自然法则，也是人生修养的最高境界。</p>
+                            <p>《中庸》开篇即言："天命之谓性，率性之谓道，修道之谓教。"从天道讲到人性，从人性讲到修养，层层深入，最终归于"至诚"的境界。全书以"诚"贯穿始终，提出"博学之、审问之、慎思之、明辨之、笃行之"的学习方法，影响深远。</p>
+                        </div>
+                    </section>
+
+                    <section class="intro-section">
+                        <h2 class="section-title">
+                            <span class="title-icon">思</span>
+                            关于子思
+                        </h2>
+                        <div class="section-body">
+                            <p>子思（前483—前402），名孔伋，字子思，鲁国人，孔子之孙、孔鲤之子。儒家学派重要传承人，被后世尊为"述圣"，与孔子、颜子、曾子、孟子并称"五圣"。</p>
+                            <p>子思幼年丧父，由祖父孔子抚养教导，后又师从曾子。他上承孔子、曾子之学，下启孟子之教，在儒学传承中起着至关重要的桥梁作用。后世将其与孟子的学说合称"思孟学派"。</p>
+                            <p>子思一生致力于儒学的阐发与传承。朱熹在《中庸章句序》中说："子思惧夫愈久而愈失其真也，于是推本尧舜以来相传之意，质以平日所闻父师之言，更互演绎，作为此书。"可见《中庸》寄托了子思忧道传道的深切用心。</p>
+                        </div>
+                    </section>
+
+                    <section class="intro-section">
+                        <h2 class="section-title">
+                            <span class="title-icon">朱</span>
+                            关于朱熹
+                        </h2>
+                        <div class="section-body">
+                            <p>朱熹（1130—1200），字元晦，号晦庵，世称朱子，南宋著名理学家、思想家、哲学家、教育家、诗人。祖籍徽州婺源（今属江西），生于福建尤溪。</p>
+                            <p>朱熹是宋代理学的集大成者，其学说被后世称为"朱子学"或"程朱理学"。他对《中庸》尤为用力，自述"自蚤岁即尝受读而窃疑之，沈潜反复，盖亦有年"，最终著成《中庸章句》，将全文分为三十三章，逐章注释。</p>
+                            <p>《中庸章句》是朱熹对《中庸》最具权威性的注解。他将《中庸》视为"孔门传授心法"，认为其"始言一理，中散为万事，末复合为一理"，体系严密，义理深远。此书自元代起被列为科举考试的标准教材，影响中国思想文化数百年之久。</p>
+                        </div>
+                    </section>
+
+                    <section class="intro-section">
+                        <h2 class="section-title">
+                            <span class="title-icon">用</span>
+                            学习价值
+                        </h2>
+                        <div class="section-body">
+                            <p>《中庸》的核心智慧在于"中"与"诚"。"中"教我们做事不偏不倚、恰到好处；"诚"教我们真实无妄、表里如一。这些思想对于当代家庭教育具有深刻的指导意义。</p>
+                            <p>作为家长，我们可以从《中庸》中学到"执两用中"的教育智慧——既不放任溺爱，也不严苛过度，在管教与自由之间找到恰当的平衡。"喜怒哀乐之未发，谓之中；发而皆中节，谓之和"，这种情绪管理的智慧，正是家长与孩子建立健康关系的关键所在。</p>
+                        </div>
+                    </section>
+                </article>
+
+                <div class="intro-footer">
+                    <div class="footer-decoration"></div>
+                    <p class="footer-text">点击左侧目录开始阅读经典</p>
+                </div>
+            </div>
+
             <!-- Chapter Content (hidden by default) -->
             <div class="chapter-content" id="chapterContent" style="display: none;">
                 <div class="chapter-header" id="chapterHeader">
@@ -270,6 +337,6 @@
     <!-- Overlay for mobile -->
     <div class="overlay" id="overlay"></div>
 
-    <script src="app.js?v=2.7"></script>
+    <script src="app.js?v=3.0"></script>
 </body>
 </html>

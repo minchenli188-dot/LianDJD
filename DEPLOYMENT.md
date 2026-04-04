@@ -1,6 +1,6 @@
 # 阿莲读经典 - 部署与维护文档
 
-> 最后更新：2026年1月9日
+> 最后更新：2026年1月15日
 
 ---
 
@@ -170,8 +170,6 @@ sudo nginx -t && sudo systemctl reload nginx
 
 ```nginx
 server {
-    listen 80;
-    listen [::]:80;
     server_name liandjd.com www.liandjd.com;
 
     location / {
@@ -185,6 +183,26 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_cache_bypass $http_upgrade;
     }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/liandjd.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/liandjd.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+server {
+    if ($host = www.liandjd.com) {
+        return 301 https://$host$request_uri;
+    }
+    if ($host = liandjd.com) {
+        return 301 https://$host$request_uri;
+    }
+
+    listen 80;
+    listen [::]:80;
+    server_name liandjd.com www.liandjd.com;
+    return 404;
 }
 ```
 
@@ -201,9 +219,25 @@ server {
 
 ### SSL/TLS 设置
 
-- **加密模式**: Flexible
-- **Always Use HTTPS**: 开启（推荐）
+- **加密模式**: Full（全程加密）
+- **Always Use HTTPS**: 开启
 - **Auto Minify**: 可选开启
+
+### Let's Encrypt 证书
+
+| 项目 | 信息 |
+|------|------|
+| 证书路径 | `/etc/letsencrypt/live/liandjd.com/fullchain.pem` |
+| 私钥路径 | `/etc/letsencrypt/live/liandjd.com/privkey.pem` |
+| 过期时间 | 2026-04-15（自动续期） |
+
+```bash
+# 手动续期证书（通常不需要，Certbot 会自动续期）
+sudo certbot renew
+
+# 检查证书状态
+sudo certbot certificates
+```
 
 ### Cloudflare 管理地址
 
@@ -279,6 +313,11 @@ pm2 restart liandjd
 ---
 
 ## 📝 更新日志
+
+### 2026-01-15
+- 配置 Let's Encrypt SSL 证书（全程 HTTPS 加密）
+- Cloudflare SSL 模式从 Flexible 升级为 Full
+- 更新 Nginx 配置支持 443 端口
 
 ### 2026-01-09
 - 初始部署到 AWS Lightsail

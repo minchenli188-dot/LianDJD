@@ -241,6 +241,52 @@ body {
     letter-spacing: 0.15em;
 }
 
+/* Book Tabs */
+.book-tabs {
+    display: flex;
+    gap: 0;
+    padding: 8px 12px;
+    background: rgba(248, 245, 240, 0.6);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.book-tab {
+    flex: 1;
+    padding: 8px 12px;
+    background: transparent;
+    border: 1px solid var(--border-light);
+    color: var(--text-medium);
+    font-family: 'Noto Serif SC', serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+}
+
+.book-tab:first-child {
+    border-radius: 6px 0 0 6px;
+    border-right: none;
+}
+
+.book-tab:last-child {
+    border-radius: 0 6px 6px 0;
+}
+
+.book-tab.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    font-weight: 600;
+}
+
+.book-tab:not(.active):hover {
+    background: rgba(139, 35, 35, 0.08);
+    color: var(--primary);
+    border-color: var(--primary-light);
+}
+
 .close-btn {
     width: 36px;
     height: 36px;
@@ -769,12 +815,12 @@ body {
 }
 
 /* Clickable Book Title in Sidebar */
-.sidebar-left .sidebar-header h2 {
+.sidebar-left .sidebar-header .book-title-text {
     cursor: pointer;
     transition: all 0.2s;
 }
 
-.sidebar-left .sidebar-header h2:hover {
+.sidebar-left .sidebar-header .book-title-text:hover {
     color: var(--accent-dark);
     transform: translateX(2px);
 }

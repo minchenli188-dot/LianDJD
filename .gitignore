@@ -3,6 +3,9 @@
 .env.local
 .env.production
 
+# SSH keys
+*.pem
+
 # Analytics data (server-generated)
 analytics.json
 

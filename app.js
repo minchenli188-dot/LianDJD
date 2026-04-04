@@ -5,11 +5,121 @@
 
 // Application State
 const AppState = {
+    currentBook: 'daxue', // 'daxue' or 'zhongyong'
     chapters: [],
     currentChapter: null,
     currentParagraph: null,
     isLoading: false,
     userId: null
+};
+
+// Book Configurations
+const BookConfig = {
+    daxue: {
+        key: 'daxue',
+        name: '《大学》章句',
+        shortName: '大学',
+        dataFile: 'data.json',
+        chapterDefs: [
+            { key: '经一章', name: '经一章', subtitle: '三纲领·八条目', category: '经' },
+            { key: '传一章', name: '传一章', subtitle: '释明明德', category: '传' },
+            { key: '传二章', name: '传二章', subtitle: '释新民', category: '传' },
+            { key: '传三章', name: '传三章', subtitle: '释止于至善', category: '传' },
+            { key: '传四章', name: '传四章', subtitle: '释本末', category: '传' },
+            { key: '传五章', name: '传五章', subtitle: '释格物致知', category: '传' },
+            { key: '朱子补传', name: '朱子补传', subtitle: '补格物致知', category: '传', isSubEntry: true, parentKey: '传五章' },
+            { key: '传六章', name: '传六章', subtitle: '释诚意', category: '传' },
+            { key: '传七章', name: '传七章', subtitle: '释正心修身', category: '传' },
+            { key: '传八章', name: '传八章', subtitle: '释修身齐家', category: '传' },
+            { key: '传九章', name: '传九章', subtitle: '释齐家治国', category: '传' },
+            { key: '传十章', name: '传十章', subtitle: '释治国平天下', category: '传' }
+        ],
+        mapSection: function(section) {
+            if (section === '经一章') return '经一章';
+            if (section === '朱子补传') return '朱子补传';
+            const mapping = {
+                '传十章 - 第一章': '传一章', '传十章 - 第二章': '传二章',
+                '传十章 - 第三章': '传三章', '传十章 - 第四章': '传四章',
+                '传十章 - 第五章': '传五章', '传十章 - 第六章': '传六章',
+                '传十章 - 第七章': '传七章', '传十章 - 第八章': '传八章',
+                '传十章 - 第九章': '传九章', '传十章 - 第十章': '传十章'
+            };
+            return mapping[section] || section;
+        },
+        renderNav: function(chapters) {
+            const jing = chapters.filter(ch => ch.category === '经');
+            const chuan = chapters.filter(ch => ch.category === '传');
+            let html = '';
+            if (jing.length > 0) {
+                html += `<div class="nav-section"><div class="nav-section-header">【经】（总纲）</div><ul class="nav-section-list">${jing.map(ch => `<li class="nav-item" data-chapter="${ch.key}"><span class="nav-item-name">${ch.name}：</span><span class="nav-item-desc">${ch.subtitle}</span></li>`).join('')}</ul></div>`;
+            }
+            if (chuan.length > 0) {
+                html += `<div class="nav-section"><div class="nav-section-header">【传】（释义）</div><ul class="nav-section-list">${chuan.map(ch => `<li class="nav-item ${ch.isSubEntry ? 'sub-entry' : ''}" data-chapter="${ch.key}"><span class="nav-item-name">${ch.name}：</span><span class="nav-item-desc">${ch.subtitle}</span></li>`).join('')}</ul></div>`;
+            }
+            return html;
+        },
+        aiPromptPrefix: '你是一位精通中国传统文化和家庭教育的智慧导师。请根据以下《大学》原文，为家长提供学习指导。'
+    },
+    zhongyong: {
+        key: 'zhongyong',
+        name: '《中庸》章句',
+        shortName: '中庸',
+        dataFile: 'zhongyong-data.json',
+        chapterDefs: [
+            { key: '序', name: '序', subtitle: '朱熹序·道统传承', category: '序' },
+            { key: '第一章', name: '第一章', subtitle: '天命·中和', category: '上' },
+            { key: '第二章', name: '第二章', subtitle: '君子时中', category: '上' },
+            { key: '第三章', name: '第三章', subtitle: '中庸至矣', category: '上' },
+            { key: '第四章', name: '第四章', subtitle: '道不行不明', category: '上' },
+            { key: '第五章', name: '第五章', subtitle: '道其不行', category: '上' },
+            { key: '第六章', name: '第六章', subtitle: '舜之大知', category: '上' },
+            { key: '第七章', name: '第七章', subtitle: '择而不守', category: '上' },
+            { key: '第八章', name: '第八章', subtitle: '颜回服膺', category: '上' },
+            { key: '第九章', name: '第九章', subtitle: '中庸不可能', category: '上' },
+            { key: '第十章', name: '第十章', subtitle: '子路问强', category: '上' },
+            { key: '第十一章', name: '第十一章', subtitle: '依乎中庸', category: '上' },
+            { key: '第十二章', name: '第十二章', subtitle: '费而隐', category: '中' },
+            { key: '第十三章', name: '第十三章', subtitle: '道不远人', category: '中' },
+            { key: '第十四章', name: '第十四章', subtitle: '素位而行', category: '中' },
+            { key: '第十五章', name: '第十五章', subtitle: '行远自迩', category: '中' },
+            { key: '第十六章', name: '第十六章', subtitle: '鬼神之德', category: '中' },
+            { key: '第十七章', name: '第十七章', subtitle: '大德受命', category: '中' },
+            { key: '第十八章', name: '第十八章', subtitle: '文王无忧', category: '中' },
+            { key: '第十九章', name: '第十九章', subtitle: '达孝善述', category: '中' },
+            { key: '第二十章', name: '第二十章', subtitle: '哀公问政', category: '中' },
+            { key: '第二十一章', name: '第二十一章', subtitle: '自诚明', category: '下' },
+            { key: '第二十二章', name: '第二十二章', subtitle: '至诚尽性', category: '下' },
+            { key: '第二十三章', name: '第二十三章', subtitle: '致曲有诚', category: '下' },
+            { key: '第二十四章', name: '第二十四章', subtitle: '至诚前知', category: '下' },
+            { key: '第二十五章', name: '第二十五章', subtitle: '诚者自成', category: '下' },
+            { key: '第二十六章', name: '第二十六章', subtitle: '至诚无息', category: '下' },
+            { key: '第二十七章', name: '第二十七章', subtitle: '尊德性道问学', category: '下' },
+            { key: '第二十八章', name: '第二十八章', subtitle: '非天子不议礼', category: '下' },
+            { key: '第二十九章', name: '第二十九章', subtitle: '本诸身', category: '下' },
+            { key: '第三十章', name: '第三十章', subtitle: '大德敦化', category: '下' },
+            { key: '第三十一章', name: '第三十一章', subtitle: '至圣配天', category: '下' },
+            { key: '第三十二章', name: '第三十二章', subtitle: '至诚经纶', category: '下' },
+            { key: '第三十三章', name: '第三十三章', subtitle: '无声无臭', category: '下' }
+        ],
+        mapSection: function(section) { return section; },
+        renderNav: function(chapters) {
+            const groups = [
+                { key: '序', label: '【序】', chapters: chapters.filter(ch => ch.category === '序') },
+                { key: '上', label: '【上篇】首章及释义（1-11）', chapters: chapters.filter(ch => ch.category === '上') },
+                { key: '中', label: '【中篇】费隐与实践（12-20）', chapters: chapters.filter(ch => ch.category === '中') },
+                { key: '下', label: '【下篇】诚与天道（21-33）', chapters: chapters.filter(ch => ch.category === '下') }
+            ];
+            return groups.filter(g => g.chapters.length > 0).map(g => `
+                <div class="nav-section">
+                    <div class="nav-section-header">${g.label}</div>
+                    <ul class="nav-section-list">
+                        ${g.chapters.map(ch => `<li class="nav-item" data-chapter="${ch.key}"><span class="nav-item-name">${ch.name}：</span><span class="nav-item-desc">${ch.subtitle}</span></li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+        },
+        aiPromptPrefix: '你是一位精通中国传统文化和家庭教育的智慧导师。请根据以下《中庸》原文，为家长提供学习指导。'
+    }
 };
 
 // DOM Elements
@@ -95,11 +205,10 @@ async function init() {
         retryBtn: document.getElementById('retryBtn'),
         
         // Content Views
-        introPage: document.getElementById('introPage'),
         chapterContent: document.getElementById('chapterContent'),
-        
+
         // Sidebar Header (book title)
-        sidebarHeader: document.querySelector('.sidebar-left .sidebar-header h2'),
+        sidebarHeader: document.querySelector('.sidebar-header .book-title-text'),
         
         // Chapter Content
         chapterNav: document.getElementById('chapterNav'),
@@ -133,11 +242,13 @@ async function init() {
     try {
         await loadData();
         renderChapterNav();
-        // Show intro page by default (don't auto-select first chapter)
         showIntroPage();
     } catch (error) {
         console.error('Init error:', error);
     }
+
+    // Setup book tab listeners
+    setupBookTabs();
 }
 
 /**
@@ -153,7 +264,7 @@ function setupEventListeners() {
     DOM.retryBtn?.addEventListener('click', retryAiRequest);
     
     // Click on book title to show intro page
-    DOM.sidebarHeader?.addEventListener('click', showIntroPage);
+    document.querySelector('.book-title-text')?.addEventListener('click', showIntroPage);
 }
 
 function openMenu() {
@@ -215,19 +326,24 @@ function retryAiRequest() {
  */
 function showIntroPage() {
     currentView = 'intro';
-    
-    // Show intro, hide chapter content
-    if (DOM.introPage) DOM.introPage.style.display = 'block';
+
+    // Hide all intro pages, show the current book's intro
+    document.querySelectorAll('.intro-page').forEach(page => {
+        page.style.display = 'none';
+    });
+    const currentIntro = document.getElementById('introPage-' + AppState.currentBook);
+    if (currentIntro) currentIntro.style.display = 'block';
+
     if (DOM.chapterContent) DOM.chapterContent.style.display = 'none';
-    
+
     // Clear active state from nav items
     DOM.chapterNav?.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
     });
-    
+
     // Reset AI panel
     showAiWelcome();
-    
+
     // Close sidebar on mobile
     if (window.innerWidth < 1024) {
         closeMenu();
@@ -239,47 +355,75 @@ function showIntroPage() {
  */
 function showChapterContent() {
     currentView = 'chapter';
-    
-    // Hide intro, show chapter content
-    if (DOM.introPage) DOM.introPage.style.display = 'none';
+
+    // Hide all intro pages, show chapter content
+    document.querySelectorAll('.intro-page').forEach(page => {
+        page.style.display = 'none';
+    });
     if (DOM.chapterContent) DOM.chapterContent.style.display = 'block';
+}
+
+/**
+ * Setup book tab switching
+ */
+function setupBookTabs() {
+    document.querySelectorAll('.book-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const bookKey = tab.dataset.book;
+            if (bookKey !== AppState.currentBook) {
+                switchBook(bookKey);
+            }
+        });
+    });
+}
+
+/**
+ * Switch to a different book
+ */
+async function switchBook(bookKey) {
+    if (!BookConfig[bookKey]) return;
+    AppState.currentBook = bookKey;
+    AppState.currentChapter = null;
+    AppState.currentParagraph = null;
+
+    // Update tab active state
+    document.querySelectorAll('.book-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.book === bookKey);
+    });
+
+    // Update sidebar header title
+    if (DOM.sidebarHeader) {
+        DOM.sidebarHeader.textContent = BookConfig[bookKey].name;
+    }
+
+    // Update intro pages visibility
+    document.querySelectorAll('.intro-page').forEach(page => {
+        page.style.display = 'none';
+    });
+
+    // Load data and re-render
+    await loadData();
+    renderChapterNav();
+    showIntroPage();
 }
 
 /**
  * Load and organize data from JSON
  */
 async function loadData() {
-    const response = await fetch('data.json');
+    const config = BookConfig[AppState.currentBook];
+    const response = await fetch(config.dataFile);
     const data = await response.json();
-    
-    // Chapter definitions with proper ordering
-    const chapterDefs = [
-        { key: '经一章', name: '经一章', subtitle: '三纲领（明明德、亲民、止于至善）、八条目（格致诚正、修齐治平）', category: '经' },
-        { key: '传一章', name: '传一章', subtitle: '释明明德', category: '传' },
-        { key: '传二章', name: '传二章', subtitle: '释新民', category: '传' },
-        { key: '传三章', name: '传三章', subtitle: '释止于至善', category: '传' },
-        { key: '传四章', name: '传四章', subtitle: '释本末', category: '传' },
-        { key: '传五章', name: '传五章', subtitle: '释格物致知', category: '传' },
-        { key: '朱子补传', name: '朱子补传', subtitle: '补格物致知', category: '传', isSubEntry: true, parentKey: '传五章' },
-        { key: '传六章', name: '传六章', subtitle: '释诚意', category: '传' },
-        { key: '传七章', name: '传七章', subtitle: '释正心修身', category: '传' },
-        { key: '传八章', name: '传八章', subtitle: '释修身齐家', category: '传' },
-        { key: '传九章', name: '传九章', subtitle: '释齐家治国', category: '传' },
-        { key: '传十章', name: '传十章', subtitle: '释治国平天下', category: '传' }
-    ];
-    
-    // Create chapter map
+
+    // Create chapter map from config
     const chapterMap = new Map();
-    chapterDefs.forEach(def => {
-        chapterMap.set(def.key, {
-            ...def,
-            paragraphs: []
-        });
+    config.chapterDefs.forEach(def => {
+        chapterMap.set(def.key, { ...def, paragraphs: [] });
     });
-    
+
     // Map data to chapters
     data.forEach(item => {
-        const chapterKey = mapToChapter(item.section);
+        const chapterKey = config.mapSection(item.section);
         if (chapterMap.has(chapterKey)) {
             chapterMap.get(chapterKey).paragraphs.push({
                 id: item.id,
@@ -288,88 +432,25 @@ async function loadData() {
             });
         }
     });
-    
+
     // Filter empty chapters
     AppState.chapters = Array.from(chapterMap.values())
         .filter(ch => ch.paragraphs.length > 0);
 }
 
 /**
- * Map section names to chapter keys
- */
-function mapToChapter(section) {
-    if (section === '经一章') return '经一章';
-    if (section === '朱子补传') return '朱子补传';
-    
-    const mapping = {
-        '传十章 - 第一章': '传一章',
-        '传十章 - 第二章': '传二章',
-        '传十章 - 第三章': '传三章',
-        '传十章 - 第四章': '传四章',
-        '传十章 - 第五章': '传五章',
-        '传十章 - 第六章': '传六章',
-        '传十章 - 第七章': '传七章',
-        '传十章 - 第八章': '传八章',
-        '传十章 - 第九章': '传九章',
-        '传十章 - 第十章': '传十章'
-    };
-    
-    return mapping[section] || section;
-}
-
-/**
- * Render chapter navigation with structured sections
+ * Render chapter navigation using book-specific renderer
  */
 function renderChapterNav() {
     if (!DOM.chapterNav) return;
-    
-    // Group chapters by category
-    const jingChapters = AppState.chapters.filter(ch => ch.category === '经');
-    const chuanChapters = AppState.chapters.filter(ch => ch.category === '传');
-    
-    let html = '';
-    
-    // Render 【经】section
-    if (jingChapters.length > 0) {
-        html += `
-            <div class="nav-section">
-                <div class="nav-section-header">【经】（总纲）</div>
-                <ul class="nav-section-list">
-                    ${jingChapters.map(ch => `
-                        <li class="nav-item" data-chapter="${ch.key}">
-                            <span class="nav-item-name">${ch.name}：</span>
-                            <span class="nav-item-desc">${ch.subtitle}</span>
-                        </li>
-                    `).join('')}
-                </ul>
-            </div>
-        `;
-    }
-    
-    // Render 【传】section
-    if (chuanChapters.length > 0) {
-        html += `
-            <div class="nav-section">
-                <div class="nav-section-header">【传】（释义）</div>
-                <ul class="nav-section-list">
-                    ${chuanChapters.map(ch => `
-                        <li class="nav-item ${ch.isSubEntry ? 'sub-entry' : ''}" data-chapter="${ch.key}">
-                            <span class="nav-item-name">${ch.name}：</span>
-                            <span class="nav-item-desc">${ch.subtitle}</span>
-                        </li>
-                    `).join('')}
-                </ul>
-            </div>
-        `;
-    }
-    
-    DOM.chapterNav.innerHTML = html;
-    
+
+    const config = BookConfig[AppState.currentBook];
+    DOM.chapterNav.innerHTML = config.renderNav(AppState.chapters);
+
     // Add click handlers
     DOM.chapterNav.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', () => {
             selectChapter(item.dataset.chapter);
-            // Close sidebar on mobile
             if (window.innerWidth < 1024) {
                 closeMenu();
             }
@@ -429,12 +510,16 @@ function renderParagraphs(paragraphs) {
  * Clean paragraph content for display
  */
 function cleanContent(content) {
-    return content
-        .replace(/《大学章句》全文\n?/g, '')
-        .replace(/【[^】]+】\n?/g, '')
-        .replace(/（[^）]+）\n?/g, '')
-        .replace(/第[一二三四五六七八九十]+章\s*[^\n]*\n?/g, '')
-        .trim();
+    if (AppState.currentBook === 'daxue') {
+        return content
+            .replace(/《大学章句》全文\n?/g, '')
+            .replace(/【[^】]+】\n?/g, '')
+            .replace(/（[^）]+）\n?/g, '')
+            .replace(/第[一二三四五六七八九十]+章\s*[^\n]*\n?/g, '')
+            .trim();
+    }
+    // 中庸 content is already clean (bold text extracted)
+    return content.trim();
 }
 
 /**
@@ -521,7 +606,9 @@ async function getAIInterpretation(paragraph) {
     
     const text = cleanContent(paragraph.content);
     
-    const prompt = `你是一位精通中国传统文化和家庭教育的智慧导师。请根据以下《大学》原文，为家长提供学习指导。
+    const config = BookConfig[AppState.currentBook];
+    const bookName = AppState.currentBook === 'daxue' ? '大学' : '中庸';
+    const prompt = `${config.aiPromptPrefix}
 
 原文：
 ${text}
