@@ -5,7 +5,7 @@
 
 // Application State
 const AppState = {
-    currentBook: 'daxue', // 'daxue' or 'zhongyong'
+    currentBook: 'daxue', // 'daxue', 'zhongyong', 'daodejing', or 'mengzi'
     chapters: [],
     currentChapter: null,
     currentParagraph: null,
@@ -19,7 +19,7 @@ const BookConfig = {
         key: 'daxue',
         name: '《大学》章句',
         shortName: '大学',
-        dataFile: 'data.json',
+        dataFile: 'daxue-data.json',
         chapterDefs: [
             { key: '经一章', name: '经一章', subtitle: '三纲领·八条目', category: '经' },
             { key: '传一章', name: '传一章', subtitle: '释明明德', category: '传' },

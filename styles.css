@@ -1031,23 +1031,6 @@ body {
     color: var(--text-light);
 }
 
-.preview-card-warning .preview-card-header {
-    border-left-color: var(--primary);
-    background: linear-gradient(90deg, rgba(139, 35, 35, 0.08) 0%, transparent 100%);
-}
-
-.preview-card-warning .preview-card-body {
-    border-left: none;
-}
-
-.preview-card-success .preview-card-header {
-    border-left-color: var(--success);
-    background: linear-gradient(90deg, rgba(74, 124, 89, 0.08) 0%, transparent 100%);
-}
-
-.preview-card-success .preview-card-body {
-    border-left: none;
-}
 
 /* AI Loading */
 .ai-loading {
@@ -1164,25 +1147,6 @@ body {
     margin-bottom: 0;
 }
 
-.response-card.positive .card-header {
-    border-left-color: var(--success);
-    background: linear-gradient(90deg, rgba(74, 124, 89, 0.08) 0%, transparent 100%);
-}
-
-.response-card.positive .card-body {
-    border-left: none;
-    background: linear-gradient(90deg, rgba(74, 124, 89, 0.03) 0%, transparent 50%);
-}
-
-.response-card.negative .card-header {
-    border-left-color: var(--primary);
-    background: linear-gradient(90deg, rgba(139, 35, 35, 0.08) 0%, transparent 100%);
-}
-
-.response-card.negative .card-body {
-    border-left: none;
-    background: linear-gradient(90deg, rgba(139, 35, 35, 0.03) 0%, transparent 50%);
-}
 
 /* AI Error */
 .ai-error {

@@ -31,7 +31,7 @@ function loadEnv() {
 }
 
 const ENV = loadEnv();
-const PORT = 8080;
+const PORT = parseInt(ENV.PORT, 10) || 8080;
 const ANALYTICS_FILE = path.join(__dirname, 'analytics.json');
 const ALLOWED_ORIGIN = ENV.ALLOWED_ORIGIN || 'https://liandjd.com';
 
