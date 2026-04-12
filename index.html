@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=4.0">
+    <link rel="stylesheet" href="styles.css?v=5.0">
 </head>
 <body>
     <!-- Header -->
@@ -46,6 +46,7 @@
                 <button class="book-tab active" data-book="daxue">大学</button>
                 <button class="book-tab" data-book="zhongyong">中庸</button>
                 <button class="book-tab" data-book="daodejing">道德经</button>
+                <button class="book-tab" data-book="mengzi">孟子</button>
             </div>
             <nav class="chapter-list" id="chapterNav">
                 <!-- Chapters populated by JS -->
@@ -242,6 +243,57 @@
                 </div>
             </div>
 
+            <!-- Book Introduction Page - 孟子 -->
+            <div class="intro-page" id="introPage-mengzi" style="display: none;">
+                <div class="intro-header">
+                    <div class="book-icon">孟</div>
+                    <h1 class="book-title">《孟子》</h1>
+                    <p class="book-meta">儒家经典 · 四书之一</p>
+                </div>
+
+                <article class="intro-content">
+                    <section class="intro-section">
+                        <h2 class="section-title">
+                            <span class="title-icon">书</span>
+                            关于《孟子》
+                        </h2>
+                        <div class="section-body">
+                            <p>《孟子》是记录战国时期思想家孟子言行的著作，由孟子及其弟子万章、公孙丑等人共同编撰而成。全书共七篇，每篇分上下，合计十四卷，是儒家最重要的经典之一。</p>
+                            <p>七篇分别为：《梁惠王》《公孙丑》《滕文公》《离娄》《万章》《告子》《尽心》。书中以孟子与诸侯、弟子的对话为主，内容涵盖政治主张、哲学思想、教育理念和人生修养等方面。</p>
+                            <p>《孟子》的核心思想包括"性善论"、"仁政"、"民贵君轻"、"浩然之气"等。孟子以雄辩著称，善用比喻和寓言说理，文风气势磅礴、逻辑严密，在中国散文史上占有重要地位。宋代朱熹将其与《大学》《中庸》《论语》合编为"四书"，成为后世科举考试的核心教材。</p>
+                        </div>
+                    </section>
+
+                    <section class="intro-section">
+                        <h2 class="section-title">
+                            <span class="title-icon">孟</span>
+                            关于孟子
+                        </h2>
+                        <div class="section-body">
+                            <p>孟子（约前372—前289），名轲，字子舆，战国时期邹国（今山东邹城）人。儒家学派的重要代表人物，被后世尊为"亚圣"，与孔子并称"孔孟"。</p>
+                            <p>孟子受业于子思的门人，继承和发展了孔子的学说。他一生周游列国，先后游历齐、宋、滕、魏等国，向各国君主宣扬仁政理想。虽然其主张在当时未被采纳，但他的思想对后世产生了深远影响。</p>
+                            <p>孟子最重要的哲学贡献是"性善论"——他认为人天生具有"恻隐之心、羞恶之心、辞让之心、是非之心"四端，这是仁、义、礼、智的萌芽。教育的意义在于"求其放心"，即找回人本有的善性。这一思想对中国的教育传统影响至深。</p>
+                        </div>
+                    </section>
+
+                    <section class="intro-section">
+                        <h2 class="section-title">
+                            <span class="title-icon">用</span>
+                            学习价值
+                        </h2>
+                        <div class="section-body">
+                            <p>《孟子》对家庭教育有着丰富而深刻的启示。"恻隐之心，人皆有之"提醒我们要相信孩子天性中的善，以引导而非压制的方式来教育；"富贵不能淫，贫贱不能移，威武不能屈"为我们树立了培养孩子人格的崇高标准。</p>
+                            <p>作为家长，我们可以从孟子"得天下英才而教育之"的理念中获得启发——教育不是单向的灌输，而是发现和培养每个孩子独特的禀赋与潜能。孟子的母亲"孟母三迁"更是中国教育史上最著名的典故之一，体现了环境对教育的深远影响。</p>
+                        </div>
+                    </section>
+                </article>
+
+                <div class="intro-footer">
+                    <div class="footer-decoration"></div>
+                    <p class="footer-text">点击左侧目录开始阅读经典</p>
+                </div>
+            </div>
+
             <!-- Chapter Content (hidden by default) -->
             <div class="chapter-content" id="chapterContent" style="display: none;">
                 <div class="chapter-header" id="chapterHeader">
@@ -400,6 +452,6 @@
     <!-- Overlay for mobile -->
     <div class="overlay" id="overlay"></div>
 
-    <script src="app.js?v=4.0"></script>
+    <script src="app.js?v=5.0"></script>
 </body>
 </html>
