@@ -33,6 +33,35 @@ function loadEnv() {
 const ENV = loadEnv();
 const PORT = 8080;
 const ANALYTICS_FILE = path.join(__dirname, 'analytics.json');
+const ALLOWED_ORIGIN = ENV.ALLOWED_ORIGIN || 'https://liandjd.com';
+
+// Rate limiter: per-IP request counts
+const rateLimitMap = new Map();
+const RATE_LIMIT = 10;          // max requests per window
+const RATE_WINDOW = 60 * 1000;  // 1 minute
+
+function checkRateLimit(ip) {
+    const now = Date.now();
+    const entry = rateLimitMap.get(ip);
+    if (!entry || now - entry.windowStart > RATE_WINDOW) {
+        rateLimitMap.set(ip, { windowStart: now, count: 1 });
+        return true;
+    }
+    entry.count++;
+    return entry.count <= RATE_LIMIT;
+}
+
+// Clean up expired entries every 5 minutes
+setInterval(() => {
+    const now = Date.now();
+    for (const [ip, entry] of rateLimitMap) {
+        if (now - entry.windowStart > RATE_WINDOW) rateLimitMap.delete(ip);
+    }
+}, 5 * 60 * 1000);
+
+function escapeHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 
 // MIME types for static files
 const MIME_TYPES = {
@@ -43,8 +72,14 @@ const MIME_TYPES = {
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
     '.svg': 'image/svg+xml',
-    '.ico': 'image/x-icon'
+    '.ico': 'image/x-icon',
+    '.jpeg': 'image/jpeg'
 };
+
+// Whitelist: only serve files with allowed extensions
+const ALLOWED_EXTENSIONS = new Set(['.html', '.css', '.js', '.json', '.png', '.jpg', '.jpeg', '.svg', '.ico']);
+// Block specific filenames even if extension matches
+const BLOCKED_FILES = new Set(['/server.js', '/analytics.json', '/package.json']);
 
 // ============== Analytics System ==============
 
@@ -258,21 +293,42 @@ async function handleAnalyticsApi(req, res, urlPath) {
         // POST /api/analytics/pageview - Track page view
         if (req.method === 'POST' && urlPath === '/api/analytics/pageview') {
             const data = JSON.parse(body);
+            if (!data.userId || !/^[a-zA-Z0-9_]+$/.test(data.userId)) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Invalid userId' }));
+                return;
+            }
             const result = trackPageView(data.userId, data.chapter);
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(result));
             return;
         }
-        
+
         // POST /api/analytics/ai - Track AI usage
         if (req.method === 'POST' && urlPath === '/api/analytics/ai') {
             const data = JSON.parse(body);
+            if (!data.userId || !/^[a-zA-Z0-9_]+$/.test(data.userId)) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Invalid userId' }));
+                return;
+            }
             const result = trackAiUsage(data.userId, data.chapter);
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(result));
             return;
         }
         
+        // Auth check for GET endpoints
+        if (req.method === 'GET') {
+            const url = new URL(req.url, 'http://localhost');
+            const token = url.searchParams.get('token');
+            if (!ENV.ANALYTICS_TOKEN || token !== ENV.ANALYTICS_TOKEN) {
+                res.writeHead(401, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Unauthorized' }));
+                return;
+            }
+        }
+
         // GET /api/analytics/summary - Get analytics dashboard
         if (req.method === 'GET' && urlPath === '/api/analytics/summary') {
             const summary = getAnalyticsSummary();
@@ -436,13 +492,13 @@ function generateDashboardHtml(summary) {
         <tbody>
             ${summary.users.map(u => `
                 <tr>
-                    <td>${u.userId}</td>
-                    <td>${new Date(u.firstVisit).toLocaleString('zh-CN')}</td>
-                    <td>${new Date(u.lastVisit).toLocaleString('zh-CN')}</td>
-                    <td>${u.totalPageViews}</td>
-                    <td>${u.totalAiUsage}</td>
-                    <td>${u.pageViewsPerDay}</td>
-                    <td>${u.aiUsagePerDay}</td>
+                    <td>${escapeHtml(u.userId)}</td>
+                    <td>${escapeHtml(new Date(u.firstVisit).toLocaleString('zh-CN'))}</td>
+                    <td>${escapeHtml(new Date(u.lastVisit).toLocaleString('zh-CN'))}</td>
+                    <td>${escapeHtml(u.totalPageViews)}</td>
+                    <td>${escapeHtml(u.totalAiUsage)}</td>
+                    <td>${escapeHtml(u.pageViewsPerDay)}</td>
+                    <td>${escapeHtml(u.aiUsagePerDay)}</td>
                 </tr>
             `).join('')}
         </tbody>
@@ -463,15 +519,15 @@ function serveStatic(req, res) {
     // Security: prevent directory traversal
     filePath = path.normalize(filePath).replace(/^(\.\.[\/\\])+/, '');
     
-    // Don't serve sensitive files
-    if (filePath.includes('.env') || filePath.includes('analytics.json')) {
+    const fullPath = path.join(__dirname, filePath);
+    const ext = path.extname(fullPath).toLowerCase();
+
+    // Whitelist check: only serve allowed extensions and non-blocked files
+    if (!ALLOWED_EXTENSIONS.has(ext) || BLOCKED_FILES.has(filePath)) {
         res.writeHead(403, { 'Content-Type': 'text/plain' });
         res.end('Forbidden');
         return;
     }
-    
-    const fullPath = path.join(__dirname, filePath);
-    const ext = path.extname(fullPath).toLowerCase();
     
     fs.readFile(fullPath, (err, data) => {
         if (err) {
@@ -493,6 +549,13 @@ function serveStatic(req, res) {
 
 // Handle API proxy request
 async function handleApiProxy(req, res) {
+    const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress;
+    if (!checkRateLimit(clientIp)) {
+        res.writeHead(429, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: '请求过于频繁，请稍后再试' }));
+        return;
+    }
+
     // Read request body
     let body = '';
     for await (const chunk of req) {
@@ -521,9 +584,9 @@ async function handleApiProxy(req, res) {
         
         const data = await response.json();
         
-        res.writeHead(response.status, { 
+        res.writeHead(response.status, {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': ALLOWED_ORIGIN
         });
         res.end(JSON.stringify(data));
         
@@ -541,7 +604,7 @@ const server = http.createServer(async (req, res) => {
     // Handle CORS preflight
     if (req.method === 'OPTIONS') {
         res.writeHead(200, {
-            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type'
         });
