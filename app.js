@@ -625,8 +625,6 @@ async function init() {
         selectedText: document.getElementById('selectedText'),
         explanationContent: document.getElementById('explanationContent'),
         principleContent: document.getElementById('principleContent'),
-        positiveCaseContent: document.getElementById('positiveCaseContent'),
-        negativeCaseContent: document.getElementById('negativeCaseContent'),
         errorMessage: document.getElementById('errorMessage')
     };
     
@@ -975,8 +973,6 @@ function showAiResponse(data) {
     if (DOM.selectedText) DOM.selectedText.textContent = cleanContent(data.originalText);
     if (DOM.explanationContent) DOM.explanationContent.innerHTML = formatContent(data.explanation);
     if (DOM.principleContent) DOM.principleContent.innerHTML = formatContent(data.principle);
-    if (DOM.positiveCaseContent) DOM.positiveCaseContent.innerHTML = formatContent(data.positiveCase);
-    if (DOM.negativeCaseContent) DOM.negativeCaseContent.innerHTML = formatContent(data.negativeCase);
 }
 
 function showAiError(message) {
@@ -1019,13 +1015,7 @@ ${text}
 纯粹的现代汉语翻译，只翻译原文含义，不要任何解读、引申或额外信息。一段话即可。
 
 ## 二、家庭教育智慧
-只写一段话。直接阐述这段经典与家庭教育的内在逻辑关系，重在推导而非说教。不要分点，不要列举。
-
-## 三、普通家长案例
-只写一段话。描述一个具体的、真实感强的日常场景，让读者感觉这是真实发生的事情。要有具体的情境（如：周末早上、放学后、饭桌上等），具体的对话或行为，具体的后果。用"有位妈妈"、"一个孩子"等泛称，不要用具体人名。场景要贴近生活，是普通家长容易犯的常见问题。
-
-## 四、智慧家长案例
-只写一段话。针对上面普通家长案例中的同一个具体场景，描述另一位家长如何运用这段经典的智慧做出不同的选择。要有同样具体的情境、对话或行为、以及积极的结果。让读者能清晰对比两种做法的差异。`;
+只写一段话。直接阐述这段经典与家庭教育的内在逻辑关系，重在推导而非说教。不要分点，不要列举。`;
 
     try {
         // Call our backend API (API key is stored securely on server)
@@ -1071,16 +1061,12 @@ ${text}
 function parseAIResponse(text) {
     const sections = {
         explanation: '',
-        principle: '',
-        positiveCase: '',
-        negativeCase: ''
+        principle: ''
     };
-    
+
     const patterns = [
         { key: 'explanation', regex: /(?:##?\s*)?(?:一、|1[.、])?白话文解释[：:\s]*/i },
-        { key: 'principle', regex: /(?:##?\s*)?(?:二、|2[.、])?家庭教育智慧[：:\s]*/i },
-        { key: 'negativeCase', regex: /(?:##?\s*)?(?:三、|3[.、])?普通家长案例[：:\s]*/i },
-        { key: 'positiveCase', regex: /(?:##?\s*)?(?:四、|4[.、])?智慧家长案例[：:\s]*/i }
+        { key: 'principle', regex: /(?:##?\s*)?(?:二、|2[.、])?家庭教育智慧[：:\s]*/i }
     ];
     
     let currentKey = '';
