@@ -119,6 +119,111 @@ const BookConfig = {
             `).join('');
         },
         aiPromptPrefix: '你是一位精通中国传统文化和家庭教育的智慧导师。请根据以下《中庸》原文，为家长提供学习指导。'
+    },
+    daodejing: {
+        key: 'daodejing',
+        name: '《道德经》',
+        shortName: '道德经',
+        dataFile: 'daodejing-data.json',
+        chapterDefs: [
+            { key: '第一章', name: '第一章', subtitle: '道可道非常道', category: '道经' },
+            { key: '第二章', name: '第二章', subtitle: '美丑善恶相生', category: '道经' },
+            { key: '第三章', name: '第三章', subtitle: '无为而治', category: '道经' },
+            { key: '第四章', name: '第四章', subtitle: '道冲不盈', category: '道经' },
+            { key: '第五章', name: '第五章', subtitle: '天地不仁', category: '道经' },
+            { key: '第六章', name: '第六章', subtitle: '谷神不死', category: '道经' },
+            { key: '第七章', name: '第七章', subtitle: '天长地久', category: '道经' },
+            { key: '第八章', name: '第八章', subtitle: '上善若水', category: '道经' },
+            { key: '第九章', name: '第九章', subtitle: '功成身退', category: '道经' },
+            { key: '第十章', name: '第十章', subtitle: '载营抱一', category: '道经' },
+            { key: '第十一章', name: '第十一章', subtitle: '有无之用', category: '道经' },
+            { key: '第十二章', name: '第十二章', subtitle: '去彼取此', category: '道经' },
+            { key: '第十三章', name: '第十三章', subtitle: '宠辱若惊', category: '道经' },
+            { key: '第十四章', name: '第十四章', subtitle: '执古御今', category: '道经' },
+            { key: '第十五章', name: '第十五章', subtitle: '微妙玄通', category: '道经' },
+            { key: '第十六章', name: '第十六章', subtitle: '致虚守静', category: '道经' },
+            { key: '第十七章', name: '第十七章', subtitle: '太上下知有之', category: '道经' },
+            { key: '第十八章', name: '第十八章', subtitle: '大道废有仁义', category: '道经' },
+            { key: '第十九章', name: '第十九章', subtitle: '见素抱朴', category: '道经' },
+            { key: '第二十章', name: '第二十章', subtitle: '独异于人', category: '道经' },
+            { key: '第二十一章', name: '第二十一章', subtitle: '孔德之容', category: '道经' },
+            { key: '第二十二章', name: '第二十二章', subtitle: '曲则全', category: '道经' },
+            { key: '第二十三章', name: '第二十三章', subtitle: '希言自然', category: '道经' },
+            { key: '第二十四章', name: '第二十四章', subtitle: '企者不立', category: '道经' },
+            { key: '第二十五章', name: '第二十五章', subtitle: '道法自然', category: '道经' },
+            { key: '第二十六章', name: '第二十六章', subtitle: '重为轻根', category: '道经' },
+            { key: '第二十七章', name: '第二十七章', subtitle: '善行无迹', category: '道经' },
+            { key: '第二十八章', name: '第二十八章', subtitle: '知雄守雌', category: '道经' },
+            { key: '第二十九章', name: '第二十九章', subtitle: '天下神器', category: '道经' },
+            { key: '第三十章', name: '第三十章', subtitle: '以道佐人主', category: '道经' },
+            { key: '第三十一章', name: '第三十一章', subtitle: '兵者不祥', category: '道经' },
+            { key: '第三十二章', name: '第三十二章', subtitle: '道常无名', category: '道经' },
+            { key: '第三十三章', name: '第三十三章', subtitle: '自知者明', category: '道经' },
+            { key: '第三十四章', name: '第三十四章', subtitle: '大道泛兮', category: '道经' },
+            { key: '第三十五章', name: '第三十五章', subtitle: '执大象', category: '道经' },
+            { key: '第三十六章', name: '第三十六章', subtitle: '微明', category: '道经' },
+            { key: '第三十七章', name: '第三十七章', subtitle: '道常无为', category: '道经' },
+            { key: '第三十八章', name: '第三十八章', subtitle: '上德不德', category: '德经' },
+            { key: '第三十九章', name: '第三十九章', subtitle: '得一', category: '德经' },
+            { key: '第四十章', name: '第四十章', subtitle: '反者道之动', category: '德经' },
+            { key: '第四十一章', name: '第四十一章', subtitle: '大器晚成', category: '德经' },
+            { key: '第四十二章', name: '第四十二章', subtitle: '道生一', category: '德经' },
+            { key: '第四十三章', name: '第四十三章', subtitle: '至柔至坚', category: '德经' },
+            { key: '第四十四章', name: '第四十四章', subtitle: '知足不辱', category: '德经' },
+            { key: '第四十五章', name: '第四十五章', subtitle: '大成若缺', category: '德经' },
+            { key: '第四十六章', name: '第四十六章', subtitle: '知足常足', category: '德经' },
+            { key: '第四十七章', name: '第四十七章', subtitle: '不出户知天下', category: '德经' },
+            { key: '第四十八章', name: '第四十八章', subtitle: '为道日损', category: '德经' },
+            { key: '第四十九章', name: '第四十九章', subtitle: '圣人无常心', category: '德经' },
+            { key: '第五十章', name: '第五十章', subtitle: '出生入死', category: '德经' },
+            { key: '第五十一章', name: '第五十一章', subtitle: '道生德畜', category: '德经' },
+            { key: '第五十二章', name: '第五十二章', subtitle: '天下有始', category: '德经' },
+            { key: '第五十三章', name: '第五十三章', subtitle: '行于大道', category: '德经' },
+            { key: '第五十四章', name: '第五十四章', subtitle: '善建不拔', category: '德经' },
+            { key: '第五十五章', name: '第五十五章', subtitle: '含德之厚', category: '德经' },
+            { key: '第五十六章', name: '第五十六章', subtitle: '知者不言', category: '德经' },
+            { key: '第五十七章', name: '第五十七章', subtitle: '以正治国', category: '德经' },
+            { key: '第五十八章', name: '第五十八章', subtitle: '祸福相倚', category: '德经' },
+            { key: '第五十九章', name: '第五十九章', subtitle: '深根固柢', category: '德经' },
+            { key: '第六十章', name: '第六十章', subtitle: '治大国若烹小鲜', category: '德经' },
+            { key: '第六十一章', name: '第六十一章', subtitle: '大国者下流', category: '德经' },
+            { key: '第六十二章', name: '第六十二章', subtitle: '道者万物之奥', category: '德经' },
+            { key: '第六十三章', name: '第六十三章', subtitle: '为无为', category: '德经' },
+            { key: '第六十四章', name: '第六十四章', subtitle: '千里之行始于足下', category: '德经' },
+            { key: '第六十五章', name: '第六十五章', subtitle: '善为道者', category: '德经' },
+            { key: '第六十六章', name: '第六十六章', subtitle: '江海为百谷王', category: '德经' },
+            { key: '第六十七章', name: '第六十七章', subtitle: '三宝', category: '德经' },
+            { key: '第六十八章', name: '第六十八章', subtitle: '不争之德', category: '德经' },
+            { key: '第六十九章', name: '第六十九章', subtitle: '哀者胜矣', category: '德经' },
+            { key: '第七十章', name: '第七十章', subtitle: '被褐怀玉', category: '德经' },
+            { key: '第七十一章', name: '第七十一章', subtitle: '知不知上', category: '德经' },
+            { key: '第七十二章', name: '第七十二章', subtitle: '民不畏威', category: '德经' },
+            { key: '第七十三章', name: '第七十三章', subtitle: '天网恢恢', category: '德经' },
+            { key: '第七十四章', name: '第七十四章', subtitle: '民不畏死', category: '德经' },
+            { key: '第七十五章', name: '第七十五章', subtitle: '民之饥', category: '德经' },
+            { key: '第七十六章', name: '第七十六章', subtitle: '柔弱处上', category: '德经' },
+            { key: '第七十七章', name: '第七十七章', subtitle: '天之道', category: '德经' },
+            { key: '第七十八章', name: '第七十八章', subtitle: '柔弱胜刚强', category: '德经' },
+            { key: '第七十九章', name: '第七十九章', subtitle: '天道无亲', category: '德经' },
+            { key: '第八十章', name: '第八十章', subtitle: '小国寡民', category: '德经' },
+            { key: '第八十一章', name: '第八十一章', subtitle: '信言不美', category: '德经' }
+        ],
+        mapSection: function(section) { return section; },
+        renderNav: function(chapters) {
+            const groups = [
+                { key: '道经', label: '【道经】上篇（1-37章）', chapters: chapters.filter(ch => ch.category === '道经') },
+                { key: '德经', label: '【德经】下篇（38-81章）', chapters: chapters.filter(ch => ch.category === '德经') }
+            ];
+            return groups.filter(g => g.chapters.length > 0).map(g => `
+                <div class="nav-section">
+                    <div class="nav-section-header">${g.label}</div>
+                    <ul class="nav-section-list">
+                        ${g.chapters.map(ch => `<li class="nav-item" data-chapter="${ch.key}"><span class="nav-item-name">${ch.name}：</span><span class="nav-item-desc">${ch.subtitle}</span></li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+        },
+        aiPromptPrefix: '你是一位精通中国传统文化和家庭教育的智慧导师。请根据以下《道德经》原文，为家长提供学习指导。'
     }
 };
 
@@ -607,7 +712,6 @@ async function getAIInterpretation(paragraph) {
     const text = cleanContent(paragraph.content);
     
     const config = BookConfig[AppState.currentBook];
-    const bookName = AppState.currentBook === 'daxue' ? '大学' : '中庸';
     const prompt = `${config.aiPromptPrefix}
 
 原文：

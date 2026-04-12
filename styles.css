@@ -270,6 +270,10 @@ body {
     border-right: none;
 }
 
+.book-tab:not(:first-child):not(:last-child) {
+    border-right: none;
+}
+
 .book-tab:last-child {
     border-radius: 0 6px 6px 0;
 }
