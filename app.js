@@ -985,7 +985,10 @@ function showAiError(message) {
 
 function formatContent(text) {
     if (!text) return '<p>内容生成中...</p>';
-    return text.split('\n').filter(l => l.trim()).map(l => `<p>${l}</p>`).join('');
+    return text.split('\n').filter(l => l.trim()).map(l => {
+        const escaped = l.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        return `<p>${escaped}</p>`;
+    }).join('');
 }
 
 /**

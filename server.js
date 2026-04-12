@@ -63,6 +63,25 @@ function escapeHtml(str) {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
+const MAX_BODY = 100 * 1024; // 100KB
+
+function readBody(req) {
+    return new Promise((resolve, reject) => {
+        let body = '';
+        let size = 0;
+        req.on('data', chunk => {
+            size += chunk.length;
+            if (size > MAX_BODY) {
+                req.destroy();
+                reject(new Error('BODY_TOO_LARGE'));
+            }
+            body += chunk;
+        });
+        req.on('end', () => resolve(body));
+        req.on('error', reject);
+    });
+}
+
 // MIME types for static files
 const MIME_TYPES = {
     '.html': 'text/html; charset=utf-8',
@@ -130,9 +149,27 @@ function saveAnalytics(analytics) {
     }
 }
 
+// In-memory analytics with periodic flush
+let analyticsData = loadAnalytics();
+let analyticsDirty = false;
+
+setInterval(() => {
+    if (analyticsDirty) {
+        saveAnalytics(analyticsData);
+        analyticsDirty = false;
+    }
+}, 30 * 1000);
+
+function shutdown() {
+    if (analyticsDirty) saveAnalytics(analyticsData);
+    process.exit(0);
+}
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
+
 // Track page view event
 function trackPageView(userId, chapter = null) {
-    const analytics = loadAnalytics();
+    const analytics = analyticsData;
     const now = Date.now();
     
     // Initialize user if new
@@ -163,14 +200,14 @@ function trackPageView(userId, chapter = null) {
     }
     
     analytics.summary.totalPageViews++;
-    
-    saveAnalytics(analytics);
+
+    analyticsDirty = true;
     return { success: true };
 }
 
 // Track AI usage event
 function trackAiUsage(userId, chapter = null) {
-    const analytics = loadAnalytics();
+    const analytics = analyticsData;
     const now = Date.now();
     
     // Initialize user if new
@@ -201,14 +238,14 @@ function trackAiUsage(userId, chapter = null) {
     }
     
     analytics.summary.totalAiUsage++;
-    
-    saveAnalytics(analytics);
+
+    analyticsDirty = true;
     return { success: true };
 }
 
 // Get analytics summary
 function getAnalyticsSummary() {
-    const analytics = loadAnalytics();
+    const analytics = analyticsData;
     const now = Date.now();
     const oneDayAgo = now - 24 * 60 * 60 * 1000;
     const oneWeekAgo = now - 7 * 24 * 60 * 60 * 1000;
@@ -284,11 +321,18 @@ async function handleAnalyticsApi(req, res, urlPath) {
     // Read request body for POST
     let body = '';
     if (req.method === 'POST') {
-        for await (const chunk of req) {
-            body += chunk;
+        try {
+            body = await readBody(req);
+        } catch (err) {
+            if (err.message === 'BODY_TOO_LARGE') {
+                res.writeHead(413, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: '请求体过大' }));
+                return;
+            }
+            throw err;
         }
     }
-    
+
     try {
         // POST /api/analytics/pageview - Track page view
         if (req.method === 'POST' && urlPath === '/api/analytics/pageview') {
@@ -352,7 +396,7 @@ async function handleAnalyticsApi(req, res, urlPath) {
     } catch (error) {
         console.error('Analytics API error:', error);
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: error.message }));
+        res.end(JSON.stringify({ error: '服务器内部错误，请稍后重试' }));
     }
 }
 
@@ -557,11 +601,18 @@ async function handleApiProxy(req, res) {
     }
 
     // Read request body
-    let body = '';
-    for await (const chunk of req) {
-        body += chunk;
+    let body;
+    try {
+        body = await readBody(req);
+    } catch (err) {
+        if (err.message === 'BODY_TOO_LARGE') {
+            res.writeHead(413, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: '请求体过大' }));
+            return;
+        }
+        throw err;
     }
-    
+
     try {
         const requestData = JSON.parse(body);
         const apiKey = ENV.GEMINI_API_KEY;
@@ -593,7 +644,7 @@ async function handleApiProxy(req, res) {
     } catch (error) {
         console.error('API proxy error:', error);
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: error.message }));
+        res.end(JSON.stringify({ error: '服务器内部错误，请稍后重试' }));
     }
 }
 
