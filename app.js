@@ -554,7 +554,8 @@ async function trackPageView(chapter = null) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 userId: AppState.userId,
-                chapter: chapter
+                chapter: chapter,
+                book: AppState.currentBook
             })
         });
     } catch (error) {
@@ -573,7 +574,8 @@ async function trackAiUsage(chapter = null) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 userId: AppState.userId,
-                chapter: chapter
+                chapter: chapter,
+                book: AppState.currentBook
             })
         });
     } catch (error) {
