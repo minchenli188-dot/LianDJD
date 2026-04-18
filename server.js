@@ -109,13 +109,13 @@ const BLOCKED_FILES = new Set(['/server.js', '/analytics.json', '/package.json']
  *   users: {
  *     [userId]: {
  *       firstVisit, lastVisit, pageViews, aiUsage,
- *       visits: [{ timestamp, type: 'page'|'ai', chapter?: string, book?: 'daxue'|'zhongyong'|'daodejing'|'mengzi' }]
+ *       visits: [{ timestamp, type: 'page'|'ai', chapter?: string, book?: 'daxue'|'zhongyong'|'daodejing'|'mengzi'|'sushu'|'neijing' }]
  *     }
  *   }
  * }
  */
 
-const VALID_BOOKS = new Set(['daxue', 'zhongyong', 'daodejing', 'mengzi']);
+const VALID_BOOKS = new Set(['daxue', 'zhongyong', 'daodejing', 'mengzi', 'sushu', 'neijing']);
 function normalizeBook(b) {
     return (typeof b === 'string' && VALID_BOOKS.has(b)) ? b : null;
 }
@@ -313,6 +313,16 @@ function inferBookFromChapter(chapter, storedBook) {
     if (/^(梁惠王|公孙丑|滕文公|离娄|万章|告子|尽心)[上下]/.test(chapter)) {
         return 'mengzi';
     }
+    // Sushu: six named chapters unique to this book
+    if (/^(原始|正道|求人之志|本德宗道|遵义|安礼)章$/.test(chapter)) {
+        return 'sushu';
+    }
+    // Neijing: 篇名含 "论"/"篇" 且以数字结尾，或直接以 "第N" 结尾（不带 "章"）。
+    // 例："上古天真论篇第一" "阴阳应象大论第五" "五藏生成篇十" "本神第八"
+    if (/(论|篇).*[〇零一二三四五六七八九十百]+$/.test(chapter) ||
+        /第[〇零一二三四五六七八九十百]+$/.test(chapter)) {
+        return 'neijing';
+    }
     // 第N章 where 34 <= N <= 81 is exclusively daodejing
     const m = chapter.match(/^第(.+?)章$/);
     if (m) {
@@ -452,6 +462,8 @@ function computeAggregates(analytics, now = Date.now()) {
         zhongyong: { pv: 0, ai: 0, chapters: new Map() },
         daodejing: { pv: 0, ai: 0, chapters: new Map() },
         mengzi: { pv: 0, ai: 0, chapters: new Map() },
+        sushu: { pv: 0, ai: 0, chapters: new Map() },
+        neijing: { pv: 0, ai: 0, chapters: new Map() },
         unknown: { pv: 0, ai: 0, chapters: new Map() }
     };
     for (const [, u] of userEntries) {
@@ -724,6 +736,8 @@ const BOOK_LABELS = {
     zhongyong: '中庸',
     daodejing: '道德经',
     mengzi: '孟子',
+    sushu: '素书',
+    neijing: '黄帝内经',
     unknown: '未分类'
 };
 const BOOK_COLORS = {
@@ -731,6 +745,8 @@ const BOOK_COLORS = {
     zhongyong: '#c4a35a',
     daodejing: '#3a6b7d',
     mengzi: '#5d7a3f',
+    sushu: '#6b4a7a',
+    neijing: '#a16b3a',
     unknown: '#999999'
 };
 const SEGMENT_LABELS = {
@@ -767,7 +783,7 @@ function generateDashboardHtml(agg) {
     const maxHour = Math.max(1, ...agg.timeseries.hourHeatmap.flat());
     const maxDaily = Math.max(1, ...agg.timeseries.daily.map(d => d.pv + d.ai));
     const totalSegUsers = Math.max(1, Object.values(agg.segments).reduce((a, b) => a + b, 0));
-    const bookOrder = ['daxue', 'zhongyong', 'daodejing', 'mengzi', 'unknown'];
+    const bookOrder = ['daxue', 'zhongyong', 'daodejing', 'mengzi', 'sushu', 'neijing', 'unknown'];
 
     const escapeJson = (obj) =>
         JSON.stringify(obj).replace(/</g, '\\u003c').replace(/-->/g, '--\\u003e');
@@ -1095,9 +1111,9 @@ if (typeof Chart !== 'undefined') {
         }
     });
 
-    const bookKeys = ['daxue','zhongyong','daodejing','mengzi','unknown'];
-    const bookLabels = {daxue:'大学',zhongyong:'中庸',daodejing:'道德经',mengzi:'孟子',unknown:'未分类'};
-    const bookColors = {daxue:'#8B2323',zhongyong:'#c4a35a',daodejing:'#3a6b7d',mengzi:'#5d7a3f',unknown:'#999999'};
+    const bookKeys = ['daxue','zhongyong','daodejing','mengzi','sushu','neijing','unknown'];
+    const bookLabels = {daxue:'大学',zhongyong:'中庸',daodejing:'道德经',mengzi:'孟子',sushu:'素书',neijing:'黄帝内经',unknown:'未分类'};
+    const bookColors = {daxue:'#8B2323',zhongyong:'#c4a35a',daodejing:'#3a6b7d',mengzi:'#5d7a3f',sushu:'#6b4a7a',neijing:'#a16b3a',unknown:'#999999'};
     const bookData = bookKeys.map(k => (window.__DASH.books[k] && window.__DASH.books[k].pv) || 0);
     new Chart(document.getElementById('bookChart'), {
         type: 'doughnut',
