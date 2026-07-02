@@ -1264,7 +1264,7 @@ const server = http.createServer(async (req, res) => {
     res.end('Not Found');
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, '127.0.0.1', () => {
     console.log(`
 ╔════════════════════════════════════════════════════════════╗
 ║                    阿莲读经典 - 服务器启动                    ║
